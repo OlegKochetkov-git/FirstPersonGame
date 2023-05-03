@@ -1,7 +1,10 @@
 # Visual Studio 2015 user specific files
 .vs/
-
+# Rider specific files
 .idea/
+
+# clean intermediate files
+clean_intermediate_files.bat
 
 # Compiled Object files
 *.slo
