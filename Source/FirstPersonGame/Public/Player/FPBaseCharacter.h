@@ -29,8 +29,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MovementAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* LookAction;
+
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 public:	
 	virtual void Tick(float DeltaTime) override;
