@@ -3,10 +3,14 @@
 #include "Player/FPBaseCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Camera/CameraComponent.h"
 
 AFPBaseCharacter::AFPBaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(RootComponent);
 }
 
 void AFPBaseCharacter::BeginPlay()
