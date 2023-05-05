@@ -27,7 +27,7 @@ protected:
 	UInputMappingContext* PlayerMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MoveAction;
+	UInputAction* MovementAction;
 
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& Value);

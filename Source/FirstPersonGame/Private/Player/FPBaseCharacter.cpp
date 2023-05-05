@@ -23,8 +23,9 @@ void AFPBaseCharacter::BeginPlay()
 
 void AFPBaseCharacter::Checking() const
 {
-	checkf(MoveAction, TEXT("MoveAction is nullptr"));
-	checkf(PlayerMappingContext, TEXT("PlayerMappingContext is nullptr"));
+	checkf(CameraComponent, TEXT("Pointer CameraComponent is nullptr in class %s,"), *StaticClass()->GetName());
+	checkf(MovementAction, TEXT("Pointer MoveAction is nullptr in class %s,"), *StaticClass()->GetName());
+	checkf(PlayerMappingContext, TEXT("Pointer PlayerMappingContext is nullptr in class %s"), *StaticClass()->GetName());
 }
 
 void AFPBaseCharacter::Tick(float DeltaTime)
@@ -38,17 +39,18 @@ void AFPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AFPBaseCharacter::Move);
+		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AFPBaseCharacter::Move);
 	}
 }
 
 void AFPBaseCharacter::Move(const FInputActionValue& Value)
 {
-	const bool CurrentValue = Value.Get<bool>();
-	if (CurrentValue)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("IA_Move triggered"));
-	}
+	const FVector2D DirectionValue = Value.Get<FVector2D>();
+	const FVector Forward = GetActorForwardVector();
+	const FVector Right = GetActorRightVector();
+
+	AddMovementInput(Forward, DirectionValue.Y);
+	AddMovementInput(Right, DirectionValue.X);
 }
 
 void AFPBaseCharacter::AddDefaultMappingContext()
