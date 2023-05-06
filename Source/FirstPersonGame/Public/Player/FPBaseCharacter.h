@@ -7,6 +7,7 @@
 #include "FPBaseCharacter.generated.h"
 
 struct FInputActionValue;
+class UFPInputHandlerComponent;
 class UCameraComponent;
 class UInputAction;
 class UInputMappingContext;
@@ -22,19 +23,11 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	UFPInputHandlerComponent* InputHandlerComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputMappingContext* PlayerMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MovementAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* LookAction;
-
 	virtual void BeginPlay() override;
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -42,5 +35,5 @@ public:
 
 private:
 	void Checking() const;
-	void AddDefaultMappingContext();
+	void CreateObjects();
 };
