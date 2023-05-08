@@ -29,11 +29,19 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input Action")
 	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input Action")
+	UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input Action")
+	UInputAction* InteractAction;
 	
 	virtual void BeginPlay() override;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
+	void Interact(const FInputActionValue& Value);
 
 public:	
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
@@ -44,7 +52,7 @@ private:
 	UPROPERTY()
 	APawn* CurrentPawn = nullptr;
 	
-	AController* GetController();
+	AController* GetController(); 
 	APawn* GetPawn();
 	
 	void Checking() const;

@@ -21,8 +21,9 @@ public class FirstPersonGame : ModuleRules
 		
 		PublicIncludePaths.AddRange(new string[]
 		{
+			"FirstPersonGame/Public/Player/Components",
 			"FirstPersonGame/Public/Player",
-			"FirstPersonGame/Public/Player/Components"
+			"FirstPersonGame/Public/UI"
 		});
 
 		// Uncomment if you are using Slate UI

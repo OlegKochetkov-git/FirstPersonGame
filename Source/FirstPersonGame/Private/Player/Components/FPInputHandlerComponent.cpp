@@ -1,8 +1,12 @@
 // First Person Game
 
 #include "Player/Components/FPInputHandlerComponent.h"
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interactable.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogInputHandleComponent, All, All);
 
 UFPInputHandlerComponent::UFPInputHandlerComponent()
 {
@@ -12,7 +16,6 @@ UFPInputHandlerComponent::UFPInputHandlerComponent()
 void UFPInputHandlerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	Checking();
 	AddDefaultMappingContext();
 }
@@ -41,6 +44,8 @@ void UFPInputHandlerComponent::SetupPlayerInputComponent(UInputComponent* Player
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &UFPInputHandlerComponent::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &UFPInputHandlerComponent::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &UFPInputHandlerComponent::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &UFPInputHandlerComponent::Interact);
 	}
 }
 
@@ -65,6 +70,38 @@ void UFPInputHandlerComponent::Look(const FInputActionValue& Value)
 
 	GetPawn()->AddControllerPitchInput(LookAxisVector.Y);
 	GetPawn()->AddControllerYawInput(LookAxisVector.X);
+}
+
+void UFPInputHandlerComponent::Jump(const FInputActionValue& Value)
+{
+	AFPBaseCharacter* Character = Cast<AFPBaseCharacter>(GetPawn());
+	if (Character)
+	{
+		Character->Jump();
+	}
+}
+
+void UFPInputHandlerComponent::Interact(const FInputActionValue& Value)
+{
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	GetController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	FVector End = ViewLocation + ViewRotation.Vector() * 1000.0f;
+	DrawDebugLine(GetWorld(), ViewLocation, End, FColor::Red, false, 3.0f, 0, 3.0f);
+	
+	FHitResult HitResult;
+	GetWorld()->LineTraceSingleByChannel(HitResult, ViewLocation, End, ECC_Visibility);
+	
+	if (HitResult.bBlockingHit)
+	{
+		UE_LOG(LogInputHandleComponent, Warning, TEXT("%s was hit"), *HitResult.GetActor()->GetName());
+
+		IInteractable* InteractableObject = Cast<IInteractable>(HitResult.GetActor());
+		if (InteractableObject)
+		{
+			InteractableObject->DoSomething();
+		}
+	}
 }
 
 AController* UFPInputHandlerComponent::GetController()

@@ -24,7 +24,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UFPInputHandlerComponent* InputHandlerComponent;
 	
 	virtual void BeginPlay() override;
